@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 interface User {
   nickname: string;
@@ -232,9 +233,9 @@ const Mypage: React.FC = () => {
         </button>
       </div>
 
-      <a href="/api/page/main" className="redirect-button">
+      <Link to="/" className="redirect-button">
         메인페이지로 이동
-      </a>
+      </Link>
     </div>
   );
 };

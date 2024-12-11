@@ -1,0 +1,95 @@
+* {
+  box-sizing: border-box;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.titleWrap {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.contentWrap {
+  width: auto;
+  text-align: center;
+}
+
+.socialButton {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.kakaoButton {
+  background-color: #fee500;
+}
+
+.socialLogo {
+  width: 20px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+}
+
+img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.header {
+  background-color: #4caf50;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.titleWrap {
+  font-size: 36px;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+.contentWrap {
+  margin: 20px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.socialButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  margin: 0px;
+  background-color: #f7e03c;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.socialButton img {
+  margin-right: 10px;
+}
+
+.projectSection {
+  margin: 20px 0;
+  text-align: justify;
+  word-break: keep-all;
+}
