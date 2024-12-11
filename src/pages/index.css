@@ -93,3 +93,126 @@ img {
   text-align: justify;
   word-break: keep-all;
 }
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.time-container {
+  text-align: center;
+  margin: 50px 0;
+}
+
+.big-time {
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.station-name {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.bold-time {
+  font-weight: bold;
+}
+
+.train-info {
+  margin-top: 20px;
+  font-size: 24px;
+}
+
+.redirect-button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 18px;
+  background-color: #4caf50;
+  /* 초록색 배경 */
+  color: white;
+  /* 흰색 글씨 */
+  border: none;
+  border-radius: 5px;
+  /* 모서리 둥글게 */
+  cursor: pointer;
+  /* 손가락 커서 */
+  text-decoration: none;
+  /* 밑줄 제거 */
+}
+
+.redirect-button:hover {
+  background-color: #45a049;
+  /* 호버 시 조금 어두운 초록색 */
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.profile {
+  text-align: center;
+  margin: 50px 0;
+}
+
+.profile-info {
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 50%;
+  /* 화면 너비의 50%로 설정 */
+  margin: 0 auto;
+  /* 중앙에 배치 */
+}
+
+.info-item {
+  flex: 1;
+  /* 모든 info-item을 동일 너비로 설정 */
+  min-width: 200px;
+  /* 최소 너비 설정 */
+  margin: 10px 0;
+}
+
+.input-group {
+  margin: 20px 0;
+}
+
+.input-group input,
+select {
+  padding: 10px;
+  font-size: 16px;
+  width: 200px;
+}
+
+.update-button {
+  padding: 10px 20px;
+  font-size: 18px;
+  background-color: #008cba;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.update-button:hover {
+  background-color: #007b9e;
+}
+
+.redirect-button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  font-size: 18px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.redirect-button:hover {
+  background-color: #45a049;
+}
