@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Button } from "@/components/ui/button";
 
-interface User {
+export interface User {
   nickname: string;
   age: number;
   gender: string;
@@ -10,104 +15,138 @@ interface User {
   line: number;
   upDown: string;
   timeToLeave: string;
-  latitude: number;
-  longitude: number;
+  latitude: string;
+  longitude: string;
 }
 
 const Mypage: React.FC = () => {
-  const [user, setUser] = useState<User>({
-    nickname: "",
-    age: 0,
-    gender: "",
-    height: 0,
-    stationName: "",
-    line: 0,
-    upDown: "",
-    timeToLeave: "",
-    latitude: 0,
-    longitude: 0,
+  const [user, setUser] = useState<User>(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser
+      ? JSON.parse(savedUser)
+      : {
+          nickname: "",
+          age: 0,
+          gender: "",
+          height: 0,
+          stationName: "",
+          line: 0,
+          upDown: "",
+          timeToLeave: "",
+          latitude: 0,
+          longitude: 0,
+        };
   });
 
-  const [inputs, setInputs] = useState({
-    age: "",
-    gender: "",
-    height: "",
-    stationName: "",
-    line: "",
-    upDown: "",
-    timeToLeave: "",
-    latitude: "",
-    longitude: "",
-  });
+  const [inputs, setInputs] = useState({ ...user });
 
   useEffect(() => {
-    // Fetch user data from API
     fetchUserData();
   }, []);
 
+  useEffect(() => {
+    localStorage.setItem("user", JSON.stringify(user));
+  }, [user]);
+
   const fetchUserData = async () => {
-    // Replace with actual API call
-    const response = await fetch("/api/user");
-    const userData = await response.json();
-    setUser(userData);
+    try {
+      const response = await fetch("/api/user");
+      const userData = await response.json();
+      setUser((prevUser) => ({
+        ...prevUser,
+        ...userData,
+      }));
+      setInputs((prevInputs) => ({
+        ...prevInputs,
+        ...userData,
+      }));
+    } catch (error) {
+      console.error("API 연결 실패:", error);
+      // API 연결 실패 시 아무 것도 하지 않음 (기존 데이터 유지)
+    }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputs({ ...inputs, [e.target.id]: e.target.value });
+    const { id, value } = e.target;
+    setInputs((prev) => ({ ...prev, [id]: value }));
+    setUser((prev) => ({ ...prev, [id]: value }));
   };
 
+  const handleRadioChange = (value: string, field: string) => {
+    setInputs((prev) => ({ ...prev, [field]: value }));
+    setUser((prev) => ({ ...prev, [field]: value }));
+  };
+
+  // updateProfile, updateStation, updateTimeToLeave, updateCoordinate 함수들도 비슷하게 수정
   const updateProfile = async () => {
     const { age, gender, height } = inputs;
-    await fetch("/api/user/profile", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ age, gender, height }),
-    });
-    fetchUserData();
+    try {
+      await fetch("/api/user/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ age, gender, height }),
+      });
+      setUser((prev) => ({ ...prev, age, gender, height }));
+    } catch (error) {
+      console.error("프로필 업데이트 실패:", error);
+      // 실패 시에도 로컬 상태는 업데이트
+      setUser((prev) => ({ ...prev, age, gender, height }));
+    }
   };
 
   const updateStation = async () => {
     const { stationName, line, upDown } = inputs;
-    await fetch("/api/user/station", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ stationName, line, upDown }),
-    });
-    fetchUserData();
+    try {
+      await fetch("/api/user/station", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stationName, line, upDown }),
+      });
+      setUser((prev) => ({ ...prev, stationName, line, upDown }));
+    } catch (error) {
+      console.error("역 정보 업데이트 실패:", error);
+    }
   };
 
   const updateTimeToLeave = async () => {
     const { timeToLeave } = inputs;
-    await fetch("/api/user/timeToLeave", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ timeToLeave }),
-    });
-    fetchUserData();
+    try {
+      await fetch("/api/user/timeToLeave", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ timeToLeave }),
+      });
+      setUser((prev) => ({ ...prev, timeToLeave }));
+    } catch (error) {
+      console.error("출발 시각 업데이트 실패:", error);
+    }
   };
 
   const updateCoordinate = async () => {
     const { latitude, longitude } = inputs;
-    await fetch("/api/user/coordinate", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ latitude, longitude }),
-    });
-    fetchUserData();
+    try {
+      await fetch("/api/user/coordinate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ latitude, longitude }),
+      });
+      setUser((prev) => ({ ...prev, latitude, longitude }));
+    } catch (error) {
+      console.error("좌표 업데이트 실패:", error);
+    }
   };
 
   const geoLocationCoord = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setInputs({
-            ...inputs,
-            latitude: position.coords.latitude.toString(),
-            longitude: position.coords.longitude.toString(),
-          });
+          const latitude = position.coords.latitude.toString();
+          const longitude = position.coords.longitude.toString();
+          setInputs((prev) => ({ ...prev, latitude, longitude }));
+          setUser((prev) => ({ ...prev, latitude, longitude }));
         },
         (error) => {
-          console.error("오류 발생: " + error.message);
+          console.error("위치 정보 가져오기 실패:", error.message);
         }
       );
     } else {
@@ -116,127 +155,168 @@ const Mypage: React.FC = () => {
   };
 
   return (
-    <div className="profile">
-      <h1>안녕하세요, {user.nickname}님!</h1>
-      <div className="profile-info">
-        <div className="info-item">나이: {user.age}세</div>
-        <div className="info-item">
-          성별:{" "}
-          {user.gender === "Male" ? "남" : user.gender === "Female" ? "여" : ""}
+    <Card className="w-full max-w-lg mx-auto">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold text-center">
+          안녕하세요, {user.nickname || "사용자"}님!
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {/* 닉네임 입력 필드 추가 */}
+        <div className="space-y-2">
+          <Label htmlFor="nickname">닉네임</Label>
+          <Input
+            id="nickname"
+            type="text"
+            className="max-w-[200px]"
+            value={inputs.nickname}
+            onChange={handleInputChange}
+          />
         </div>
-        <div className="info-item">키: {user.height}cm</div>
-      </div>
 
-      <div className="profile-info">
-        <div className="info-item">출발역: {user.stationName}</div>
-        <div className="info-item">노선: {user.line}호선</div>
-        <div className="info-item">
-          상/하행 여부: {user.upDown === "1" ? "상행" : "하행"}
+        <div className="space-y-2">
+          <Label htmlFor="age">나이: {inputs.age}세</Label>
+          <Input
+            id="age"
+            type="number"
+            className="max-w-[120px]"
+            value={inputs.age}
+            onChange={handleInputChange}
+          />
         </div>
-      </div>
 
-      <div className="profile-info">
-        <div className="info-item">역 출발 시각: {user.timeToLeave}</div>
-        <div className="info-item">위도: {user.latitude}</div>
-        <div className="info-item">경도: {user.longitude}</div>
-      </div>
+        <div className="space-y-2">
+          <Label>성별: {inputs.gender}</Label>
+          <RadioGroup
+            value={inputs.gender}
+            onValueChange={(value) => handleRadioChange(value, "gender")}
+            className="flex gap-4"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="Male" id="male" />
+              <Label htmlFor="male">남성</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="Female" id="female" />
+              <Label htmlFor="female">여성</Label>
+            </div>
+          </RadioGroup>
+        </div>
 
-      <div className="input-group">
-        <input
-          type="number"
-          id="age"
-          placeholder="나이"
-          value={inputs.age}
-          onChange={handleInputChange}
-        />
-        <input
-          type="text"
-          id="gender"
-          placeholder="성별 (Male/Female)"
-          value={inputs.gender}
-          onChange={handleInputChange}
-        />
-        <input
-          type="number"
-          id="height"
-          placeholder="키 (cm)"
-          value={inputs.height}
-          onChange={handleInputChange}
-        />
-        <button className="update-button" onClick={updateProfile}>
-          수정
-        </button>
-      </div>
+        <div className="space-y-2">
+          <Label htmlFor="height">키: {inputs.height}cm</Label>
+          <Input
+            id="height"
+            type="number"
+            className="max-w-[120px]"
+            value={inputs.height}
+            onChange={handleInputChange}
+          />
+        </div>
 
-      <div className="input-group">
-        <input
-          type="text"
-          id="stationName"
-          placeholder="출발역"
-          value={inputs.stationName}
-          onChange={handleInputChange}
-        />
-        <input
-          type="number"
-          id="line"
-          placeholder="N호선"
-          value={inputs.line}
-          onChange={handleInputChange}
-        />
-        <input
-          type="number"
-          id="upDown"
-          placeholder="상행:1 | 하행:2"
-          value={inputs.upDown}
-          onChange={handleInputChange}
-        />
-        <button className="update-button" onClick={updateStation}>
-          수정
-        </button>
-      </div>
+        <Button className="w-full" onClick={updateProfile}>
+          프로필 수정
+        </Button>
 
-      <div className="input-group">
-        <input
-          type="text"
-          id="timeToLeave"
-          placeholder="출발 시각 (hh:mm:ss)"
-          value={inputs.timeToLeave}
-          onChange={handleInputChange}
-        />
-        <button className="update-button" onClick={updateTimeToLeave}>
-          수정
-        </button>
-      </div>
+        <div className="space-y-2">
+          <Label htmlFor="stationName">출발 역: {inputs.stationName}</Label>
+          <Input
+            id="stationName"
+            type="text"
+            className="max-w-[200px]"
+            value={inputs.stationName}
+            onChange={handleInputChange}
+          />
+        </div>
 
-      <div className="input-group">
-        <input
-          type="number"
-          id="latitude"
-          placeholder="위도"
-          step="0.000001"
-          value={inputs.latitude}
-          onChange={handleInputChange}
-        />
-        <input
-          type="number"
-          id="longitude"
-          placeholder="경도"
-          step="0.000001"
-          value={inputs.longitude}
-          onChange={handleInputChange}
-        />
-        <button className="update-button" onClick={updateCoordinate}>
-          수정
-        </button>
-        <button className="update-button" onClick={geoLocationCoord}>
+        <div className="space-y-2">
+          <Label htmlFor="line">노선: {inputs.line}호선</Label>
+          <Input
+            id="line"
+            type="number"
+            className="max-w-[200px]"
+            value={inputs.line}
+            onChange={handleInputChange}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label>상/하행 여부: {inputs.upDown === "1" ? "상행" : "하행"}</Label>
+          <RadioGroup
+            value={inputs.upDown}
+            onValueChange={(value) => handleRadioChange(value, "upDown")}
+            className="flex gap-4"
+          >
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="1" id="up" />
+              <Label htmlFor="up">상행</Label>
+            </div>
+            <div className="flex items-center space-x-2">
+              <RadioGroupItem value="2" id="down" />
+              <Label htmlFor="down">하행</Label>
+            </div>
+          </RadioGroup>
+        </div>
+
+        <Button className="w-full" onClick={updateStation}>
+          역 정보 수정
+        </Button>
+
+        <div className="space-y-2">
+          <Label htmlFor="timeToLeave">
+            역 출발 시각: {inputs.timeToLeave}
+          </Label>
+          <Input
+            id="timeToLeave"
+            type="time"
+            className="max-w-[200px]"
+            value={inputs.timeToLeave}
+            onChange={handleInputChange}
+          />
+        </div>
+
+        <Button className="w-full" onClick={updateTimeToLeave}>
+          출발 시각 수정
+        </Button>
+
+        <div className="space-y-2">
+          <Label>유저 현재 위치</Label>
+          <div>
+            <Label htmlFor="latitude">위도: {inputs.latitude}</Label>
+            <Input
+              id="latitude"
+              type="number"
+              step="0.000001"
+              className="max-w-[200px]"
+              value={inputs.latitude}
+              onChange={handleInputChange}
+            />
+            <Label htmlFor="longitude">경도: {inputs.longitude}</Label>
+            <Input
+              id="longitude"
+              type="number"
+              step="0.000001"
+              className="max-w-[200px]"
+              value={inputs.longitude}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+
+        <Button className="w-full" onClick={geoLocationCoord}>
           현재위치 가져오기
-        </button>
-      </div>
+        </Button>
+        <Button className="w-full" onClick={updateCoordinate}>
+          좌표 수정
+        </Button>
 
-      <Link to="/" className="redirect-button">
-        메인페이지로 이동
-      </Link>
-    </div>
+        <Link to="/" className="block text-center">
+          <Button variant="outline" className="w-full">
+            메인페이지로 이동
+          </Button>
+        </Link>
+      </CardContent>
+    </Card>
   );
 };
 
