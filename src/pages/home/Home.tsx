@@ -21,10 +21,10 @@ const Home: React.FC = () => {
 
   // Assume user data is fetched from an API or passed as props
   const user: User = {
-    stationName: "서울",
-    line: 1,
+    stationName: "건대입구",
+    line: 7,
     upDown: 1,
-    timeToLeave: "09:00",
+    timeToLeave: "15:12:10",
   };
 
   useEffect(() => {

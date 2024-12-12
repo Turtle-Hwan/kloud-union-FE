@@ -74,7 +74,7 @@ export function TodoList() {
               value={newDuration}
               onChange={(e) => setNewDuration(e.target.value)}
               placeholder="Time (min)"
-              className="w-20"
+              className="w-40"
             />
           </div>
           <Button type="submit" className="w-full">
@@ -103,7 +103,7 @@ export function TodoList() {
             </li>
           ))}
         </ul>
-        <div className="mt-4 pt-4 border-t flex items-center justify-between text-muted-foreground">
+        <div className="mt-4 pt-4 border-t flex items-center justify-between text-foreground">
           <div className="flex items-center">
             <Clock className="w-4 h-4 mr-2" />
             <span>아침 준비 시간 함계 :</span>

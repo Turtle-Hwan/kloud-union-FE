@@ -16,7 +16,7 @@ const Index: React.FC = () => {
       .then(() => {
         // Handle successful login, e.g., redirect to dashboard
         //navigate("/api/cognito/login");
-        // window.location.href = "/api/cognito/login";
+        window.location.href = "/api/cognito/login";
       })
       .catch((error) => {
         console.error("Login failed:", error);
