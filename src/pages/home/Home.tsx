@@ -215,11 +215,11 @@ const Home: React.FC = () => {
           </div>
 
           <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 text-lg text-muted-foreground">
               <span>해당 역까지 도보 도착 예상 시간: {walkTime}</span>
               {!walkTime && <Loader2 className="w-4 h-4 animate-spin" />}
             </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2 text-lg text-muted-foreground">
               <span> 해당 역까지 도보 도착 예상 거리: {walkDistance}</span>
               {!walkDistance && <Loader2 className="w-4 h-4 animate-spin" />}
             </div>
@@ -236,11 +236,11 @@ const Home: React.FC = () => {
 
           <div className="space-y-3 pt-4">
             <div className="flex justify-between items-center">
-              <span>첫 번째 열차 도착 예정 시간:</span>
+              <span>🚇 첫 번째 열차 도착 예정 시간:</span>
               <span className="font-semibold">{firstTrain}</span>
             </div>
             <div className="flex justify-between items-center">
-              <span>두 번째 열차 도착 예정 시간:</span>
+              <span>🚇 두 번째 열차 도착 예정 시간:</span>
               <span className="font-semibold">{secondTrain}</span>
             </div>
           </div>
