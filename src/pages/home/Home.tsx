@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Clock, Loader2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { calculateFinalSpeed } from "@/utils/speedFactor";
 
 interface User {
   stationName: string;
@@ -183,7 +184,7 @@ const Home: React.FC = () => {
           startLatitude: start.latitude,
           endLongitude: end.longitude,
           endLatitude: end.latitude,
-          speed: 30,
+          speed: calculateFinalSpeed(user.age, user.gender, user.height),
         }),
       });
       if (!response.ok) throw new Error("Network response was not ok");
