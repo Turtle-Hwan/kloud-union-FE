@@ -186,7 +186,10 @@ const Mypage: React.FC = () => {
     if (latitude) updatedUser.latitude = latitude;
     if (longitude) updatedUser.longitude = longitude;
 
-    console.log(timeToLeave);
+    updateProfile();
+    updateStation();
+    updateTimeToLeave();
+    updateCoordinate();
   };
 
   return (
