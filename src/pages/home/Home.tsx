@@ -278,88 +278,92 @@ const Home: React.FC = () => {
     return () => clearInterval(timer);
   }, [timeRemaining]);
 
-  return properTime == "오류 발생" || properTime == "정보 없음" ? (
-    <Card className="w-full max-w-xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-xl font-bold text-center  text-red-300">
-          정보를 불러오는 중 오류가 발생했습니다. <br></br>
-          My Page에서 사용자 정보를 다시 확인해 주세요
-        </CardTitle>
-      </CardHeader>
-    </Card>
-  ) : (
-    <Card className="w-full max-w-xl mx-auto">
-      <CardHeader>
-        <CardTitle className="text-3xl font-bold text-center">
-          {user.stationName}역
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="space-y-4">
-          <div className="flex items-center gap-2 text-lg text-foreground">
-            <Clock className="w-4 h-4" />
-            <span>현재 시각: {currentTime}</span>
+  return (
+    <>
+      {(properTime == "오류 발생" || properTime == "정보 없음") && (
+        <Card className="w-full max-w-xl mx-auto my-5">
+          <CardHeader>
+            <CardTitle className="text-xl font-bold text-center  text-red-300">
+              정보를 불러오는 중 오류가 발생했습니다. <br></br>
+              My Page에서 사용자 정보를 다시 확인해 주세요
+            </CardTitle>
+          </CardHeader>
+        </Card>
+      )}
+
+      <Card className="w-full max-w-xl mx-auto">
+        <CardHeader>
+          <CardTitle className="text-3xl font-bold text-center">
+            {user.stationName}역
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-lg text-foreground">
+              <Clock className="w-4 h-4" />
+              <span>현재 시각: {currentTime}</span>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-lg text-muted-foreground">
+                <span>해당 역까지 도보 도착 예상 시간: {walkTime}</span>
+                {!walkTime && <Loader2 className="w-4 h-4 animate-spin" />}
+              </div>
+              <div className="flex items-center gap-2 text-lg text-muted-foreground">
+                <span> 해당 역까지 도보 도착 예상 거리: {walkDistance}</span>
+                {!walkDistance && <Loader2 className="w-4 h-4 animate-spin" />}
+              </div>
+            </div>
+
+            <div className="text-center space-y-2">
+              <div className="text-sm text-muted-foreground">
+                적정 열차 도착 예정 시각:
+              </div>
+              <div className="text-4xl font-bold tracking-wider">
+                {properTime}
+              </div>
+            </div>
+
+            <div className="space-y-3 pt-4">
+              <div className="flex justify-between items-center">
+                <span>🚇 첫 번째 열차 도착 예정 시간:</span>
+                <span className="font-semibold">{firstTrain}</span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span>🚇 두 번째 열차 도착 예정 시간:</span>
+                <span className="font-semibold">{secondTrain}</span>
+              </div>
+            </div>
+
+            <Separator className="my-5" />
+            <div className="mt-4 flex items-center gap-2 text-lg text-muted-foreground">
+              <span>할 일 완료 예상 시간: {taskDuration} 분</span>
+            </div>
+
+            <div className="flex items-center gap-2 text-lg ">
+              <span>집에서 출발해야 할 시각: {leaveTime}</span>
+            </div>
+
+            {departureStatus.includes("지각") ? (
+              <div className="text-red-500 font-bold text-xl">
+                {departureStatus} 얼른 출발하세요!!
+              </div>
+            ) : timeRemaining > 0 ? (
+              <div className="text-orange-500 font-bold text-xl">
+                출발까지 {Math.floor(timeRemaining / 60)}분 {timeRemaining % 60}
+                초가 남았습니다!!
+              </div>
+            ) : null}
           </div>
 
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-lg text-muted-foreground">
-              <span>해당 역까지 도보 도착 예상 시간: {walkTime}</span>
-              {!walkTime && <Loader2 className="w-4 h-4 animate-spin" />}
-            </div>
-            <div className="flex items-center gap-2 text-lg text-muted-foreground">
-              <span> 해당 역까지 도보 도착 예상 거리: {walkDistance}</span>
-              {!walkDistance && <Loader2 className="w-4 h-4 animate-spin" />}
-            </div>
-          </div>
-
-          <div className="text-center space-y-2">
-            <div className="text-sm text-muted-foreground">
-              적정 열차 도착 예정 시각:
-            </div>
-            <div className="text-4xl font-bold tracking-wider">
-              {properTime}
-            </div>
-          </div>
-
-          <div className="space-y-3 pt-4">
-            <div className="flex justify-between items-center">
-              <span>🚇 첫 번째 열차 도착 예정 시간:</span>
-              <span className="font-semibold">{firstTrain}</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span>🚇 두 번째 열차 도착 예정 시간:</span>
-              <span className="font-semibold">{secondTrain}</span>
-            </div>
-          </div>
-
-          <Separator className="my-5" />
-          <div className="mt-4 flex items-center gap-2 text-lg text-muted-foreground">
-            <span>할 일 완료 예상 시간: {taskDuration} 분</span>
-          </div>
-
-          <div className="flex items-center gap-2 text-lg ">
-            <span>집에서 출발해야 할 시각: {leaveTime}</span>
-          </div>
-
-          {departureStatus.includes("지각") ? (
-            <div className="text-red-500 font-bold text-xl">
-              {departureStatus} 얼른 출발하세요!!
-            </div>
-          ) : timeRemaining > 0 ? (
-            <div className="text-orange-500 font-bold text-xl">
-              출발까지 {Math.floor(timeRemaining / 60)}분 {timeRemaining % 60}
-              초가 남았습니다!!
-            </div>
-          ) : null}
-        </div>
-
-        <Link to="/mypage" className="block">
-          <Button className="w-full bg-green-500 hover:bg-green-600">
-            마이페이지로 이동
-          </Button>
-        </Link>
-      </CardContent>
-    </Card>
+          <Link to="/mypage" className="block">
+            <Button className="w-full bg-green-500 hover:bg-green-600">
+              마이페이지로 이동
+            </Button>
+          </Link>
+        </CardContent>
+      </Card>
+    </>
   );
 };
 
