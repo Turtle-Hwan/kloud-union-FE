@@ -21,6 +21,8 @@ const Home: React.FC = () => {
   const [walkDistance, setWalkDistance] = useState<string>("Loading...");
   const [taskDuration, setTaskDuration] = useState<string>("0");
   const [leaveTime, setLeaveTime] = useState<string>("Loading...");
+  const [departureStatus, setDepartureStatus] = useState<string>("");
+  const [timeRemaining, setTimeRemaining] = useState<number>(0);
 
   // Assume user data is fetched from an API or passed as props
   const mockUser: User = {
@@ -131,7 +133,7 @@ const Home: React.FC = () => {
           longitude: userInfo.longitude,
         };
       }
-      console.log(userProfile);
+      //console.log(userProfile);
       await fetchWalkDistance(userProfile, data);
       await fetchWalkTime(userProfile, data);
     } catch (error) {
@@ -221,8 +223,8 @@ const Home: React.FC = () => {
       ? Number(localStorage.getItem("totalDuration"))
       : 0; // 할 일 소요 시간 (초)
 
-    console.log(properTrainTime, walkTimeSeconds, taskDurationSeconds);
-    console.log(properTrainTime && walkTimeSeconds > 0);
+    //console.log(properTrainTime, walkTimeSeconds, taskDurationSeconds);
+    //console.log(properTrainTime && walkTimeSeconds > 0);
 
     if (properTrainTime && walkTimeSeconds > 0) {
       const [hours, minutes, seconds] = properTrainTime.split(":").map(Number);
@@ -232,6 +234,9 @@ const Home: React.FC = () => {
       const leaveDate = new Date(
         trainDate.getTime() - (walkTimeSeconds + taskDurationSeconds) * 1000
       );
+      //console.log(leaveDate);
+      updateDepartureStatus(leaveDate);
+
       setLeaveTime(
         leaveDate.toLocaleTimeString("ko-KR", {
           hour: "2-digit",
@@ -240,12 +245,35 @@ const Home: React.FC = () => {
       );
     } else {
       setLeaveTime("계산 불가");
+      setDepartureStatus("");
+    }
+  };
+
+  const updateDepartureStatus = (leaveDate: Date) => {
+    const now = new Date();
+    const timeDiff = leaveDate.getTime() - now.getTime();
+
+    if (timeDiff < 0) {
+      setDepartureStatus("지각입니다!!");
+      setTimeRemaining(0);
+    } else {
+      setTimeRemaining(Math.floor(timeDiff / 1000));
     }
   };
 
   useEffect(() => {
     calculateLeaveTime();
   }, [properTime, walkTime]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (timeRemaining > 0) {
+        setTimeRemaining((prev) => prev - 1);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeRemaining]);
 
   return (
     <Card className="w-full max-w-lg mx-auto">
@@ -300,6 +328,17 @@ const Home: React.FC = () => {
           <div className="flex items-center gap-2 text-lg ">
             <span>집에서 출발해야 할 시각: {leaveTime}</span>
           </div>
+
+          {departureStatus === "지각입니다!!" ? (
+            <div className="text-red-500 font-bold text-xl">
+              지각입니다!! 얼른 출발하세요!!
+            </div>
+          ) : timeRemaining > 0 ? (
+            <div className="text-orange-500 font-bold text-xl">
+              출발까지 {Math.floor(timeRemaining / 60)}분 {timeRemaining % 60}
+              초가 남았습니다!!
+            </div>
+          ) : null}
         </div>
 
         <Link to="/mypage" className="block">
