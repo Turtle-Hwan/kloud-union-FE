@@ -5,6 +5,7 @@ const navItems = [
   { name: "Home", path: "/" },
   { name: "Main Page", path: "/home" },
   { name: "My Page", path: "/mypage" },
+  { name: "Todo List", path: "/todo" },
 ];
 
 export function Header() {

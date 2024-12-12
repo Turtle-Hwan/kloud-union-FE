@@ -3,6 +3,7 @@ import Index from "./pages/Index";
 import Mypage from "./pages/mypage/Mypage";
 import Home from "./pages/home/Home";
 import { Header } from "./Header";
+import { TodoList } from "./pages/todo/Todo";
 
 function App() {
   const routes = [
@@ -22,6 +23,10 @@ function App() {
         {
           path: "/home",
           element: <Home />,
+        },
+        {
+          path: "/todo",
+          element: <TodoList />,
         },
       ],
     },
