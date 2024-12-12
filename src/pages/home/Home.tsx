@@ -220,11 +220,13 @@ const Home: React.FC = () => {
       ? Number(walkTime.replace(/[^0-9]/g, ""))
       : 0; // 도보 예상 시간 (초)
     const taskDurationSeconds = localStorage.getItem("totalDuration")
-      ? Number(localStorage.getItem("totalDuration"))
+      ? Number(localStorage.getItem("totalDuration")) * 60
       : 0; // 할 일 소요 시간 (초)
 
     //console.log(properTrainTime, walkTimeSeconds, taskDurationSeconds);
     //console.log(properTrainTime && walkTimeSeconds > 0);
+
+    //console.log(taskDurationSeconds);
 
     if (properTrainTime && walkTimeSeconds > 0) {
       const [hours, minutes, seconds] = properTrainTime.split(":").map(Number);
@@ -320,8 +322,8 @@ const Home: React.FC = () => {
             </div>
           </div>
 
-          <Separator className="my-4" />
-          <div className="flex items-center gap-2 text-lg text-muted-foreground">
+          <Separator className="my-5" />
+          <div className="mt-4 flex items-center gap-2 text-lg text-muted-foreground">
             <span>할 일 완료 예상 시간: {taskDuration} 분</span>
           </div>
 
