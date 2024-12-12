@@ -333,7 +333,7 @@ const Home: React.FC = () => {
 
           {departureStatus === "지각입니다!!" ? (
             <div className="text-red-500 font-bold text-xl">
-              지각입니다!! 얼른 출발하세요!!
+              지각할 수 있습니다!! 얼른 출발하세요!!
             </div>
           ) : timeRemaining > 0 ? (
             <div className="text-orange-500 font-bold text-xl">

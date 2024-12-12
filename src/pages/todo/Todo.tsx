@@ -11,7 +11,11 @@ interface Todo {
 }
 
 export function TodoList() {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(
+    localStorage.getItem("todos")
+      ? JSON.parse(localStorage.getItem("todos")!)
+      : []
+  );
   const [newTodo, setNewTodo] = useState("");
   const [newDuration, setNewDuration] = useState("");
   const [totalDuration, setTotalDuration] = useState(0);
