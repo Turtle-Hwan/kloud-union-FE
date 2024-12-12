@@ -1,18 +1,22 @@
+import { Button } from "@/components/ui/button";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 const Index: React.FC = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const kakaoLogin = () => {
     // You might want to use a library like axios for API calls
     fetch("/api/user/login", {
-      method: "POST",
+      method: "GET",
+      mode: "no-cors",
     })
-      .then(() => {
+      .then((res) => {
         // Handle successful login, e.g., redirect to dashboard
-        navigate("/");
+        //navigate("/api/cognito/login");
+        window.location.href = "/api/cognito/login";
       })
       .catch((error) => {
         console.error("Login failed:", error);
@@ -26,24 +30,28 @@ const Index: React.FC = () => {
         <img src="/images/powerpowermorning.jpg" alt="main_img" />
       </div>
       <div className="contentWrap">
-        <button className="socialButton kakaoButton" onClick={kakaoLogin}>
+        <Button className="w-full" variant="default" onClick={kakaoLogin}>
           {/* <img
             src="/images/kakao_logo.png"
             alt="Kakao"
             className="socialLogo"
           /> */}
           로그인
-        </button>
+        </Button>
       </div>
-      <div className="contentWrap">
-        <Link to="/home" className="socialButton">
-          홈
-        </Link>
-      </div>
-      <div className="contentWrap">
-        <Link to="/mypage" className="socialButton">
-          마이페이지
-        </Link>
+
+      <div className="contentWrap flex gap-5 w-full">
+        <Button variant="outline" className="w-full">
+          <Link to="/home" className="w-full">
+            Main Page
+          </Link>
+        </Button>
+
+        <Button variant="outline" className="w-full">
+          <Link to="/mypage" className="w-full">
+            My Page
+          </Link>
+        </Button>
       </div>
       <div className="contentWrap">
         <div className="projectSection">
