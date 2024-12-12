@@ -1,6 +1,7 @@
 import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import Index from "./pages/Index";
 import Mypage from "./pages/mypage/Mypage";
+import Home from "./pages/home/Home";
 
 function App() {
   const routes = [
@@ -15,6 +16,10 @@ function App() {
         {
           path: "/mypage",
           element: <Mypage />,
+        },
+        {
+          path: "/home",
+          element: <Home />,
         },
       ],
     },
