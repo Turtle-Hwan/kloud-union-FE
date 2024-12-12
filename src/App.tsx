@@ -4,6 +4,7 @@ import Mypage from "./pages/mypage/Mypage";
 import Home from "./pages/home/Home";
 import { Header } from "./Header";
 import { TodoList } from "./pages/todo/Todo";
+import TokenRedirect from "./pages/token/TokenRedirect";
 
 function App() {
   const routes = [
@@ -27,6 +28,10 @@ function App() {
         {
           path: "/todo",
           element: <TodoList />,
+        },
+        {
+          path: "/token-redirect",
+          element: <TokenRedirect />,
         },
       ],
     },

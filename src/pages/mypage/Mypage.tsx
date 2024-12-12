@@ -40,31 +40,36 @@ const Mypage: React.FC = () => {
 
   const [inputs, setInputs] = useState({ ...user });
 
-  // useEffect(() => {
-  //   fetchUserData();
-  // }, []);
+  useEffect(() => {
+    fetchUserData();
+  }, []);
 
   useEffect(() => {
     localStorage.setItem("user", JSON.stringify(user));
   }, [user]);
 
-  // const fetchUserData = async () => {
-  //   try {
-  //     const response = await fetch("/api/user/profile");
-  //     const userData = await response.json();
-  //     setUser((prevUser) => ({
-  //       ...prevUser,
-  //       ...userData,
-  //     }));
-  //     setInputs((prevInputs) => ({
-  //       ...prevInputs,
-  //       ...userData,
-  //     }));
-  //   } catch (error) {
-  //     console.error("API 연결 실패:", error);
-  //     // API 연결 실패 시 아무 것도 하지 않음 (기존 데이터 유지)
-  //   }
-  // };
+  const fetchUserData = async () => {
+    try {
+      const response = await fetch("/api/user/profile", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      const userData = await response.json();
+      if (response.status === 200) {
+        setUser((prevUser) => ({
+          ...prevUser,
+          ...userData,
+        }));
+        setInputs((prevInputs) => ({
+          ...prevInputs,
+          ...userData,
+        }));
+      }
+    } catch (error) {
+      console.error("API 연결 실패:", error);
+      // API 연결 실패 시 아무 것도 하지 않음 (기존 데이터 유지)
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -83,7 +88,10 @@ const Mypage: React.FC = () => {
     try {
       await fetch("/api/user/profile", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ age, gender, height }),
       });
       setUser((prev) => ({ ...prev, age, gender, height }));

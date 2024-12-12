@@ -143,7 +143,10 @@ const Home: React.FC = () => {
   };
 
   const fetchUserProfile = async () => {
-    const response = await fetch("/api/user/profile");
+    const response = await fetch("/api/user/profile", {
+      method: "GET",
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    });
     const userProfile = await response.json();
     return { latitude: userProfile.latitude, longitude: userProfile.longitude };
   };
