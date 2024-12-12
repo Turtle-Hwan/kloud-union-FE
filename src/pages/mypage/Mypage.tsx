@@ -107,7 +107,10 @@ const Mypage: React.FC = () => {
     try {
       await fetch("/api/user/station", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ stationName, line, upDown }),
       });
       setUser((prev) => ({ ...prev, stationName, line, upDown }));
@@ -121,7 +124,10 @@ const Mypage: React.FC = () => {
     try {
       await fetch("/api/user/timeToLeave", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ timeToLeave }),
       });
       setUser((prev) => ({ ...prev, timeToLeave }));
@@ -135,7 +141,10 @@ const Mypage: React.FC = () => {
     try {
       await fetch("/api/user/coordinate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ latitude, longitude }),
       });
       setUser((prev) => ({ ...prev, latitude, longitude }));
