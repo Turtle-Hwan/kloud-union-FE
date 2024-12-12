@@ -256,7 +256,8 @@ const Home: React.FC = () => {
     const timeDiff = leaveDate.getTime() - now.getTime();
 
     if (timeDiff < 0) {
-      setDepartureStatus("지각입니다!!");
+      const lateMinutes = Math.ceil(-timeDiff / (1000 * 60));
+      setDepartureStatus(`${lateMinutes}분 지각할 수 있습니다!!`);
       setTimeRemaining(0);
     } else {
       setTimeRemaining(Math.floor(timeDiff / 1000));
@@ -331,9 +332,9 @@ const Home: React.FC = () => {
             <span>집에서 출발해야 할 시각: {leaveTime}</span>
           </div>
 
-          {departureStatus === "지각입니다!!" ? (
+          {departureStatus.includes("지각") ? (
             <div className="text-red-500 font-bold text-xl">
-              지각할 수 있습니다!! 얼른 출발하세요!!
+              {departureStatus} 얼른 출발하세요!!
             </div>
           ) : timeRemaining > 0 ? (
             <div className="text-orange-500 font-bold text-xl">
