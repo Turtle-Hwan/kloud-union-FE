@@ -177,6 +177,8 @@ const Mypage: React.FC = () => {
     if (timeToLeave) updatedUser.timeToLeave = timeToLeave;
     if (latitude) updatedUser.latitude = latitude;
     if (longitude) updatedUser.longitude = longitude;
+
+    console.log(timeToLeave);
   };
 
   return (

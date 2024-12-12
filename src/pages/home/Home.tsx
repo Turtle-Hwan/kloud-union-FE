@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Clock, Loader2 } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 interface User {
   stationName: string;
@@ -18,6 +19,8 @@ const Home: React.FC = () => {
   const [secondTrain, setSecondTrain] = useState<string>("Loading...");
   const [walkTime, setWalkTime] = useState<string>("Loading...");
   const [walkDistance, setWalkDistance] = useState<string>("Loading...");
+  const [taskDuration, setTaskDuration] = useState<string>("0");
+  const [leaveTime, setLeaveTime] = useState<string>("Loading...");
 
   // Assume user data is fetched from an API or passed as props
   const mockUser: User = {
@@ -38,6 +41,13 @@ const Home: React.FC = () => {
     fetchProperTime();
     fetchRealTimeData();
     fetchStationCoordinate();
+  }, []);
+
+  useEffect(() => {
+    const duration = localStorage.getItem("totalDuration");
+    if (duration) {
+      setTaskDuration(duration);
+    }
   }, []);
 
   const updateCurrentTime = () => {
@@ -202,6 +212,41 @@ const Home: React.FC = () => {
     return `${meters}m`;
   };
 
+  const calculateLeaveTime = () => {
+    const properTrainTime = properTime; // 적정 열차 도착 시각 (예: "15:30:20")
+    const walkTimeSeconds = walkTime
+      ? Number(walkTime.replace(/[^0-9]/g, ""))
+      : 0; // 도보 예상 시간 (초)
+    const taskDurationSeconds = localStorage.getItem("totalDuration")
+      ? Number(localStorage.getItem("totalDuration"))
+      : 0; // 할 일 소요 시간 (초)
+
+    console.log(properTrainTime, walkTimeSeconds, taskDurationSeconds);
+    console.log(properTrainTime && walkTimeSeconds > 0);
+
+    if (properTrainTime && walkTimeSeconds > 0) {
+      const [hours, minutes, seconds] = properTrainTime.split(":").map(Number);
+      const trainDate = new Date();
+      trainDate.setHours(hours, minutes, seconds);
+
+      const leaveDate = new Date(
+        trainDate.getTime() - (walkTimeSeconds + taskDurationSeconds) * 1000
+      );
+      setLeaveTime(
+        leaveDate.toLocaleTimeString("ko-KR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        })
+      );
+    } else {
+      setLeaveTime("계산 불가");
+    }
+  };
+
+  useEffect(() => {
+    calculateLeaveTime();
+  }, [properTime, walkTime]);
+
   return (
     <Card className="w-full max-w-lg mx-auto">
       <CardHeader>
@@ -245,6 +290,15 @@ const Home: React.FC = () => {
               <span>🚇 두 번째 열차 도착 예정 시간:</span>
               <span className="font-semibold">{secondTrain}</span>
             </div>
+          </div>
+
+          <Separator className="my-4" />
+          <div className="flex items-center gap-2 text-lg text-muted-foreground">
+            <span>할 일 완료 예상 시간: {taskDuration} 분</span>
+          </div>
+
+          <div className="flex items-center gap-2 text-lg ">
+            <span>집에서 출발해야 할 시각: {leaveTime}</span>
           </div>
         </div>
 

@@ -57,7 +57,7 @@ export function TodoList() {
   return (
     <Card className="w-auto m-5">
       <CardHeader>
-        <CardTitle>아침에 할 일들</CardTitle>
+        <CardTitle>할 일들</CardTitle>
       </CardHeader>
       <CardContent>
         <form onSubmit={addTodo} className="space-y-4">
@@ -106,7 +106,7 @@ export function TodoList() {
         <div className="mt-4 pt-4 border-t flex items-center justify-between text-foreground">
           <div className="flex items-center">
             <Clock className="w-4 h-4 mr-2" />
-            <span>아침 준비 시간 함계 :</span>
+            <span>준비 시간 합계 :</span>
           </div>
           <span className="font-medium">{totalDuration} 분</span>
         </div>
