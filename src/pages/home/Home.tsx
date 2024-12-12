@@ -278,7 +278,16 @@ const Home: React.FC = () => {
     return () => clearInterval(timer);
   }, [timeRemaining]);
 
-  return (
+  return properTime == "오류 발생" || properTime == "정보 없음" ? (
+    <Card className="w-full max-w-lg mx-auto">
+      <CardHeader>
+        <CardTitle className="text-xl font-bold text-center  text-red-300">
+          정보를 불러오는 중 오류가 발생했습니다. <br></br>
+          My Page에서 사용자 정보를 다시 확인해 주세요
+        </CardTitle>
+      </CardHeader>
+    </Card>
+  ) : (
     <Card className="w-full max-w-lg mx-auto">
       <CardHeader>
         <CardTitle className="text-3xl font-bold text-center">
