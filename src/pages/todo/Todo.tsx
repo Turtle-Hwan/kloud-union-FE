@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,16 +14,24 @@ export function TodoList() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodo, setNewTodo] = useState("");
   const [newDuration, setNewDuration] = useState("");
+  const [totalDuration, setTotalDuration] = useState(0);
 
   useEffect(() => {
     const storedTodos = localStorage.getItem("todos");
+    const storedTotalDuration = localStorage.getItem("totalDuration");
     if (storedTodos) {
       setTodos(JSON.parse(storedTodos));
+    }
+    if (storedTotalDuration) {
+      setTotalDuration(JSON.parse(storedTotalDuration));
     }
   }, []);
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
+    const newTotal = todos.reduce((sum, todo) => sum + todo.duration, 0);
+    setTotalDuration(newTotal);
+    localStorage.setItem("totalDuration", JSON.stringify(newTotal));
   }, [todos]);
 
   const addTodo = (e: React.FormEvent) => {
@@ -95,6 +103,13 @@ export function TodoList() {
             </li>
           ))}
         </ul>
+        <div className="mt-4 pt-4 border-t flex items-center justify-between text-muted-foreground">
+          <div className="flex items-center">
+            <Clock className="w-4 h-4 mr-2" />
+            <span>아침 준비 시간 함계 :</span>
+          </div>
+          <span className="font-medium">{totalDuration} 분</span>
+        </div>
       </CardContent>
     </Card>
   );
