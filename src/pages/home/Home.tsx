@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Clock, Loader2 } from "lucide-react";
 
 interface User {
   stationName: string;
@@ -47,15 +50,18 @@ const Home: React.FC = () => {
   };
 
   const fetchProperTime = async () => {
+    const savedUser = localStorage.getItem("user");
+    const userInfo = savedUser ? JSON.parse(savedUser) : user;
+
     try {
       const response = await fetch("/api/subway/properTime", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          stationName: user.stationName,
-          line: user.line,
-          upDown: user.upDown,
-          timeToLeave: user.timeToLeave,
+          stationName: userInfo.stationName,
+          line: userInfo.line,
+          upDown: userInfo.upDown,
+          timeToLeave: userInfo.timeToLeave,
         }),
       });
       if (!response.ok) throw new Error("Network response was not ok");
@@ -66,16 +72,18 @@ const Home: React.FC = () => {
       setProperTime("오류 발생");
     }
   };
-
   const fetchRealTimeData = async () => {
+    const savedUser = localStorage.getItem("user");
+    const userInfo = savedUser ? JSON.parse(savedUser) : user;
+
     try {
       const response = await fetch("/api/subway/realTime", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          stationName: user.stationName,
-          line: user.line,
-          upDown: user.upDown,
+          stationName: userInfo.stationName,
+          line: Number(userInfo.line),
+          upDown: Number(userInfo.upDown),
         }),
       });
       if (!response.ok) throw new Error("Network response was not ok");
@@ -90,18 +98,28 @@ const Home: React.FC = () => {
   };
 
   const fetchStationCoordinate = async () => {
+    const savedUser = localStorage.getItem("user");
+    const userInfo = savedUser ? JSON.parse(savedUser) : user;
+
     try {
       const response = await fetch("/api/subway/coordinate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          stationName: user.stationName,
-          line: user.line,
+          stationName: userInfo.stationName,
+          line: userInfo.line,
         }),
       });
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
-      const userProfile = await fetchUserProfile();
+      let userProfile = await fetchUserProfile();
+      if (!userProfile.latitude || !userProfile.longitude) {
+        userProfile = {
+          latitude: userInfo.latitude,
+          longitude: userInfo.longitude,
+        };
+      }
+      console.log(userProfile);
       await fetchWalkDistance(userProfile, data);
       await fetchWalkTime(userProfile, data);
     } catch (error) {
@@ -183,35 +201,58 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="time-container">
-      <p className="station-name">{user.stationName}역</p>
-      <p>
-        현재 시각: <span className="bold-time">{currentTime}</span>
-      </p>
-      <p>
-        <span>해당 역까지 도보 도착 예상 시간 : </span>
-        <span>{walkTime}</span>
-      </p>
-      <p>
-        <span>해당 역까지 도보 도착 예상 거리 : </span>
-        <span>{walkDistance}</span>
-      </p>
-      <p>
-        <span className="bold-time">적정 열차 도착 예정 시각: </span>
-        <span className="big-time">{properTime}</span>
-      </p>
-      <div className="train-info">
-        <p>
-          첫 번째 열차 도착 예정 시간: <span>{firstTrain}</span>
-        </p>
-        <p>
-          두 번째 열차 도착 예정 시간: <span>{secondTrain}</span>
-        </p>
-      </div>
-      <Link to="/mypage" className="redirect-button">
-        마이페이지로 이동
-      </Link>
-    </div>
+    <Card className="w-full max-w-lg mx-auto">
+      <CardHeader>
+        <CardTitle className="text-3xl font-bold text-center">
+          {user.stationName}역
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 text-lg text-foreground">
+            <Clock className="w-4 h-4" />
+            <span>현재 시각: {currentTime}</span>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <span>해당 역까지 도보 도착 예상 시간: {walkTime}</span>
+              {!walkTime && <Loader2 className="w-4 h-4 animate-spin" />}
+            </div>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <span> 해당 역까지 도보 도착 예상 거리: {walkDistance}</span>
+              {!walkDistance && <Loader2 className="w-4 h-4 animate-spin" />}
+            </div>
+          </div>
+
+          <div className="text-center space-y-2">
+            <div className="text-sm text-muted-foreground">
+              적정 열차 도착 예정 시각:
+            </div>
+            <div className="text-4xl font-bold tracking-wider">
+              {properTime}
+            </div>
+          </div>
+
+          <div className="space-y-3 pt-4">
+            <div className="flex justify-between items-center">
+              <span>첫 번째 열차 도착 예정 시간:</span>
+              <span className="font-semibold">{firstTrain}</span>
+            </div>
+            <div className="flex justify-between items-center">
+              <span>두 번째 열차 도착 예정 시간:</span>
+              <span className="font-semibold">{secondTrain}</span>
+            </div>
+          </div>
+        </div>
+
+        <Link to="/mypage" className="block">
+          <Button className="w-full bg-green-500 hover:bg-green-600">
+            마이페이지로 이동
+          </Button>
+        </Link>
+      </CardContent>
+    </Card>
   );
 };
 

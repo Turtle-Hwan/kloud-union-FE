@@ -348,7 +348,7 @@ const Mypage: React.FC = () => {
           전체 정보 수정
         </Button>
 
-        <Link to="/" className="block text-center">
+        <Link to="/home" className="block text-center">
           <Button variant="link" className="w-full">
             메인페이지로 이동
           </Button>
