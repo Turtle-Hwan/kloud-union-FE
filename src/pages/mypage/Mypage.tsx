@@ -154,6 +154,31 @@ const Mypage: React.FC = () => {
     }
   };
 
+  const updateAll = async () => {
+    const {
+      age,
+      gender,
+      height,
+      stationName,
+      line,
+      upDown,
+      timeToLeave,
+      latitude,
+      longitude,
+    } = inputs;
+    const updatedUser = { ...user };
+
+    if (age) updatedUser.age = Number(age);
+    if (gender) updatedUser.gender = gender;
+    if (height) updatedUser.height = Number(height);
+    if (stationName) updatedUser.stationName = stationName;
+    if (line) updatedUser.line = Number(line);
+    if (upDown) updatedUser.upDown = upDown;
+    if (timeToLeave) updatedUser.timeToLeave = timeToLeave;
+    if (latitude) updatedUser.latitude = latitude;
+    if (longitude) updatedUser.longitude = longitude;
+  };
+
   return (
     <Card className="w-full max-w-lg mx-auto">
       <CardHeader>
@@ -281,37 +306,50 @@ const Mypage: React.FC = () => {
 
         <div className="space-y-2">
           <Label>유저 현재 위치</Label>
-          <div>
-            <Label htmlFor="latitude">위도: {inputs.latitude}</Label>
-            <Input
-              id="latitude"
-              type="number"
-              step="0.000001"
-              className="max-w-[200px]"
-              value={inputs.latitude}
-              onChange={handleInputChange}
-            />
-            <Label htmlFor="longitude">경도: {inputs.longitude}</Label>
-            <Input
-              id="longitude"
-              type="number"
-              step="0.000001"
-              className="max-w-[200px]"
-              value={inputs.longitude}
-              onChange={handleInputChange}
-            />
+          <div className="flex row justify-between">
+            <div>
+              <Label htmlFor="latitude">위도: {inputs.latitude}</Label>
+              <Input
+                id="latitude"
+                type="number"
+                step="0.000001"
+                className="max-w-[200px]"
+                value={inputs.latitude}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div>
+              <Label htmlFor="longitude">경도: {inputs.longitude}</Label>
+              <Input
+                id="longitude"
+                type="number"
+                step="0.000001"
+                className="max-w-[200px]"
+                value={inputs.longitude}
+                onChange={handleInputChange}
+              />
+            </div>
           </div>
         </div>
 
-        <Button className="w-full" onClick={geoLocationCoord}>
-          현재위치 가져오기
-        </Button>
-        <Button className="w-full" onClick={updateCoordinate}>
-          좌표 수정
+        <div className="flex row justify-between gap-5">
+          <Button
+            className="w-full"
+            onClick={geoLocationCoord}
+            variant="secondary"
+          >
+            현재위치 가져오기
+          </Button>
+          <Button className="w-full" onClick={updateCoordinate}>
+            좌표 수정
+          </Button>
+        </div>
+        <Button className="w-full mt-4" onClick={updateAll}>
+          전체 정보 수정
         </Button>
 
         <Link to="/" className="block text-center">
-          <Button variant="outline" className="w-full">
+          <Button variant="link" className="w-full">
             메인페이지로 이동
           </Button>
         </Link>
