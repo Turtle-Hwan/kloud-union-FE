@@ -182,7 +182,7 @@ const Mypage: React.FC = () => {
   };
 
   return (
-    <Card className="w-full max-w-lg mx-auto">
+    <Card className="w-full max-w-xl mx-auto">
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-center">
           안녕하세요, {user.nickname || "사용자"}님!

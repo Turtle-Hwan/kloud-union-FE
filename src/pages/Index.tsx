@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import React from "react";
 //import { useNavigate, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -24,10 +25,14 @@ const Index: React.FC = () => {
   };
 
   return (
-    <div>
+    <Card className="w-full max-w-3xl mx-auto">
       <div className="header">
         <div className="titleWrap">힘세고 강한 아침</div>
-        <img src="/images/powerpowermorning.jpg" alt="main_img" />
+        <img
+          src="/images/powerpowermorning.jpg"
+          alt="main_img"
+          className="max-w-lg mx-auto"
+        />
       </div>
       <div className="contentWrap">
         <Button className="w-full" variant="default" onClick={kakaoLogin}>
@@ -63,6 +68,12 @@ const Index: React.FC = () => {
             실시간 위치 정보, 기상청 날씨 정보를 통해 사용자의 출근 및 통학을
             돕는 웹 어플리케이션입니다.
           </p>
+        </div>
+        <div className="projectSection">
+          <h2 className="mb-5 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+            프로젝트 아키텍쳐 설계
+          </h2>
+          <img src="/images/cws_archi.png" alt="cws_archi.png" />
         </div>
         <div className="projectSection">
           <h2 className="mb-5 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
@@ -109,14 +120,8 @@ const Index: React.FC = () => {
             <li>사용자 맞춤 가중치 조정 기능</li>
           </ul>
         </div>
-        <div className="projectSection">
-          <h2 className="mb-5 scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-            프로젝트 아키텍쳐 설계 및 구현도
-          </h2>
-          <img src="/images/cws_archi.png" alt="cws_archi.png" />
-        </div>
       </div>
-    </div>
+    </Card>
   );
 };
 

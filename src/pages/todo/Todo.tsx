@@ -59,7 +59,7 @@ export function TodoList() {
   };
 
   return (
-    <Card className="w-auto m-5">
+    <Card className="w-full max-w-xl mx-auto">
       <CardHeader>
         <CardTitle>할 일들</CardTitle>
       </CardHeader>

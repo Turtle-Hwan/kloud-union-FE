@@ -279,7 +279,7 @@ const Home: React.FC = () => {
   }, [timeRemaining]);
 
   return properTime == "오류 발생" || properTime == "정보 없음" ? (
-    <Card className="w-full max-w-lg mx-auto">
+    <Card className="w-full max-w-xl mx-auto">
       <CardHeader>
         <CardTitle className="text-xl font-bold text-center  text-red-300">
           정보를 불러오는 중 오류가 발생했습니다. <br></br>
@@ -288,7 +288,7 @@ const Home: React.FC = () => {
       </CardHeader>
     </Card>
   ) : (
-    <Card className="w-full max-w-lg mx-auto">
+    <Card className="w-full max-w-xl mx-auto">
       <CardHeader>
         <CardTitle className="text-3xl font-bold text-center">
           {user.stationName}역
