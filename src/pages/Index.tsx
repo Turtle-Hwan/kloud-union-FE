@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import React from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+//import { useNavigate, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 const Index: React.FC = () => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  // const navigate = useNavigate();
+  // const [searchParams] = useSearchParams();
 
   const kakaoLogin = () => {
     // You might want to use a library like axios for API calls
@@ -13,7 +13,7 @@ const Index: React.FC = () => {
       method: "GET",
       mode: "no-cors",
     })
-      .then((res) => {
+      .then(() => {
         // Handle successful login, e.g., redirect to dashboard
         //navigate("/api/cognito/login");
         window.location.href = "/api/cognito/login";
